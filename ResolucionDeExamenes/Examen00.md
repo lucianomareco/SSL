@@ -15,7 +15,7 @@ La información es un grupo de datos ya procesados que sirven construir un mensa
 + Algoritmos y Estructuras de Datos
 + Sintaxis y Semántica de los Lenguajes
 + Paradigmas de Programación 
-+ Ge1stión de Datos
++ Gestión de Datos
 
 **4. Indique las asignaturas del área de sistemas de información.**
 
@@ -28,7 +28,7 @@ La información es un grupo de datos ya procesados que sirven construir un mensa
 
 **5. Indique el paradigma de programación aplicado en primer año de la carrera.**
 
-Paradigma Estructurado
+Paradigma imperativo procedural y estilo estructurado.
 
 **6. Defina abstracción** 
 
@@ -60,7 +60,7 @@ Una partición de un conjunto es una subdivisión del mismo en subconjuntos no v
 
 **6. Sea X={a,b} indique P(X)**
 
-P(X)={{a},{b}}
+P(X)={{},{a},{b},{a,b}}
 
 **7. Defina Lenguaje Formal**
 
