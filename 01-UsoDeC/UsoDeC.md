@@ -2,7 +2,7 @@
 
 ## Tecnologías digitales
 
-  ### Andriod
+  ### Android
  
    + Repositorio público: https://android.googlesource.com/
    + Se desarrolla en C: Si
