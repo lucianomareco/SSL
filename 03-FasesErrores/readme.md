@@ -71,4 +71,26 @@ valor 42 debe surgir de una variable.
 
 # Resolucion 
 
+2. Comando ejecutado
+
+` gcc -E hello2.c > hello2.i `
+
+El preprocesador agrega las siguientes sentencias:
+~~~
+# 1 "hello2.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "hello2.c"
+~~~
+Luego, reemplaza la línea #include <stdio.h> con el archivo de cabecera del sistema con ese nombre. Además reemplaza el comentario el comentario /*medio*/ por un espacio.
+
+Por ultimo agrega otras sentencias:
+~~~
+# 2 "hello2.c" 2
+# 2 "hello2.c"
+~~~
+
+
+
+
 
