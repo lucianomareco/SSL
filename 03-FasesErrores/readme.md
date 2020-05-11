@@ -69,7 +69,7 @@ int i=42;
 + El programa ejemplo debe enviar por stdout la frase La respuesta es 42, el
 valor 42 debe surgir de una variable.
 
-# Resolucion 
+# Resolución 
 
 2. Comando ejecutado
 
@@ -187,6 +187,39 @@ Cuando una aplicación está compilada, normalmente no podemos acceder al códig
 ~~~
 
 El ensamblado transforma el programa escrito en lenguaje ensamblador a código objeto, un archivo binario en lenguaje de máquina ejecutable por el procesador.
+
+10. Comando ejecutado: 
+`gcc -o hello4 hello4.o`
+
+La vinculación no se realizara con la biblioteca estándar debido a que la misma no esta incluida en el archivo hello4.c.
+
+11. Comando ejecutado:
+`gcc hello5.c`
+
+12. Al ejecutar hello5.exe se obtiene
+`La respuesta es 4200768`
+El resultado no es correcto ya que en la función dentro de la función printf() no se especifica la variable a la que se hace referencia en “%d”.
+
+13. Comando ejecutado:
+`gcc hello6.c`
+
+Al ejecutar hello5.exe se obtiene el resultado correcto:
+`La respuesta es 42`
+
+14. Comando ejecutado:
+`gcc hello7.c`
+
+Resultado: 
+~~~
+hello7.c: In function 'main':
+hello7.c:3:2: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+  printf("La respuesta es %d\n", i);
+  ^~~~~~
+hello7.c:3:2: warning: incompatible implicit declaration of built-in function 'printf'
+hello7.c:3:2: note: include '<stdio.h>' or provide a declaration of 'printf'
+~~~
+
+Esta versión no funciona, debido a que el compilador no encuentra la definición de la función printf. Para que funcione se debería incluir la biblioteca standar de c `stdio.h`
 
 
 
