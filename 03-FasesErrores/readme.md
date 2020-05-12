@@ -219,7 +219,7 @@ hello7.c:3:2: warning: incompatible implicit declaration of built-in function 'p
 hello7.c:3:2: note: include '<stdio.h>' or provide a declaration of 'printf'
 ~~~
 
-Esta versión no funciona, debido a que el compilador no encuentra la definición de la función printf. Para que funcione se debería incluir la biblioteca standar de c `stdio.h`
+Esta versión funciona debido a que por default, el vinculador busca cualquier función no definida en la biblioteca estandar. Por este motivo encuentra `printf`. 
 
 
 
