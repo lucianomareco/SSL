@@ -77,3 +77,15 @@ poscondiciones de cada función, arriba de cada prototipo.
 - Por lo menos una operación debe implementarse con recursividad.
 - Las implementaciones no deben utilizar funciones estándar, declaradas en
 <string.h>
+
+## Productos
+~~~
+04-Strings
+|-- readme.md
+|-- AnálisisComparativo.md
+|-- String.md
+|-- Makefile
+|-- StringTest.c
+|-- String.h
+`-- String.c.
+~~~
