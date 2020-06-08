@@ -12,7 +12,7 @@ GetLength (s) = | 0                   if s = ε
 IsEmpty : Σ* --> |B
 ~~~
 IsEmpty (s) = | V      if s = ε
-              |        E.O.C.
+              | F      E.O.C.
 ~~~              
 
 ## Power
