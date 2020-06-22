@@ -1,3 +1,9 @@
+/*  String.c
+    Luciano Mareco
+    20200622
+*/
+
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include "String.h"
