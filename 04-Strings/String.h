@@ -1,4 +1,4 @@
-unsigned GetLength(const char *);
+size_t GetLength(const char *);
 
 
 bool IsEmpty (const char *);
