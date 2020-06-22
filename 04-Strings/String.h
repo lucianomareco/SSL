@@ -1,3 +1,10 @@
-int GetLength (const char *);
-Bool IsEmpty (const char *);
-char* Power (const char *, unsigned);
+unsigned GetLength(const char *);
+
+
+bool IsEmpty (const char *);
+
+
+void Power (const char *, char *, unsigned);
+
+
+bool Compare (const char *, const char *);
