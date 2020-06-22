@@ -1,3 +1,8 @@
+/*  String.h
+    Luciano Mareco
+    20200622
+*/
+
 size_t GetLength(const char *);
 
 
