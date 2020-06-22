@@ -17,8 +17,16 @@ IsEmpty (s) = | V      if s = ε
 
 ## Power
 
-Power (s,n) : Σ*, |N --> Σ*
+Power : Σ* x |N --> Σ*
 ~~~
 Power (s,n) : | ε                   if n = 0
               | Σ*. Power (s,n-1)   E.O.C.
 ~~~
+
+## Compare
+
+Compare :  Σ* x Σ* --> |B
+
+~~~
+Compare(s1,s2) : | F     if s1 = s2
+                 | V     E.O.C.
