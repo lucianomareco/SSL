@@ -1,6 +1,24 @@
 # Calculadora Infija: Construcción manual 
 ---
 
+## Objetivos
++ Experimentar el diseño de la especificación de lenguajes a nivel léxico y
+sintáctico.
++ Experimentar la implementación manual del nivel léxico y sintáctico de
+lenguajes.
+
+## Temas
++ Especificación del nivel Léxico y Sintáctico.
++ Implementación del nivel Léxico y Sintáctico.
++ Implementación de Scanner
++ Implementación de Parser
+## Problema
+Análisis de expresiones aritméticas infijas simples que incluya:
++ Números naturales con representación literal en base 10.
++ Identificadores de variables.
++ Adición.
++ Multiplicación.
+
 ## Gramática Léxica
 
 ~~~
