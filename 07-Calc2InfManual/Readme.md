@@ -34,3 +34,5 @@
 | = | IGUAL |
 | ( | PARENIZQUIERDO |
 | ) | PARENDERECHO |
+| + | SUMA |
+| * | MULTIPLICACION |
