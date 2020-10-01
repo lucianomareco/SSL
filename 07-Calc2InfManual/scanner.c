@@ -1,7 +1,7 @@
 #include "scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <ctype.h>
 
 
 typedef enum
@@ -19,8 +19,26 @@ typedef enum
     Q10_fdt,
     Q11_error
 } Estado;
-TOKEN scanner(void)
 
+void mostrar(TOKEN);
+TOKEN scanner(void);
+
+int main(void)
+{
+    TOKEN t;
+    t = scanner();
+    mostrar(t);
+    t = scanner();
+    mostrar(t);
+    t = scanner();
+    mostrar(t);
+    t = scanner();
+    mostrar(t);
+    t = scanner();
+    mostrar(t);
+};
+
+TOKEN scanner(void)
 {
     static Estado estadoActual = Q0_inicial;
     char c;
@@ -125,12 +143,13 @@ TOKEN scanner(void)
                 return FDT;
             else
             {
-            unget(c, stdin);
+            ungetc(c, stdin);
             return FDS;
             }
         }   
     }    
-}    
+
+}}    
 
 void mostrar(TOKEN a)
 {
