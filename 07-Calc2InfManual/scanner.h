@@ -13,3 +13,5 @@ typedef enum
 } TOKEN;
 
 TOKEN Scanner(void);
+
+void mostrar(TOKEN);
