@@ -1,9 +1,10 @@
 #include "scanner.h"
+#include "simbolos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-
+//----------------- ESTADOS ---------------
 typedef enum
 {
     Q0_inicial,
@@ -20,84 +21,26 @@ typedef enum
     Q11_error
 } Estado;
 
-
 void mostrar(TOKEN);
 TOKEN scanner(void);
-void agregarSimbolo(simbolo);
-void agregarCaracter(int); 
+void agregarCaracter(int);
+
 void mostrarBuffer();
 void limpiarBuffer();
-int buffer [8] = {0};
+int buffer[8] = {0};
 int punteroDeBuffer = 0;
-int punteroDeSimbolo = 0;
-
-struct simbolo{
-    TOKEN tipo;
-    int nombre [8];
-    int valor [8];
-} tablaDeSimbolos [32];
-
-void agregarSimbolo(struct simbolo s){
-    tablaDeSimbolos [punteroDeSimbolo] = s;
-
-}
-
-void agregarCaracter(int c){
-    buffer[punteroDeBuffer] = c;
-    punteroDeBuffer++;
-}
 
 
 
-void mostrarBuffer (){
-    for(int i=0; i<8; i++){
-        printf(" %d ,", buffer[i]);
-    }
-}
 
-void limpiarBuffer(){
-    for(int i=0; i<8 ; ++i ){
-        buffer [i] = 0;
-    }
-    punteroDeBuffer = 0;
-}
 int main(void)
 {
-   /* agregarCaracter(1);
-    agregarCaracter(2);
-    agregarCaracter(3);
-    agregarCaracter(4);
-    agregarCaracter(5);
-    agregarCaracter(6);
-    agregarCaracter(7);
-    agregarCaracter(8);
-    mostrarBuffer();
-    limpiarBuffer();
-    mostrarBuffer();*/
+    TOKEN t;
 
+    while ((t = scanner()) != FDT)
+        mostrar(t);
 
-   TOKEN t;
-    t = scanner();
-    mostrar(t);
-   // mostrarBuffer();
-   // printf("\n");
-    t = scanner();
-    mostrar(t);
-   // mostrarBuffer();
-   // printf("\n");
-    t = scanner();
-    mostrar(t);
-   // mostrarBuffer();
-   // printf("\n");
-    t = scanner();
-    mostrar(t);
-   // mostrarBuffer();
-   // printf("\n");
-    t = scanner();
-    mostrar(t);
-   // mostrarBuffer();
-   // printf("\n");
-  
+    mostrarTablaSimbolos();
 }
 
 TOKEN scanner(void)
@@ -109,61 +52,64 @@ TOKEN scanner(void)
         switch (estadoActual)
         {
         case Q0_inicial:
-            if(isalpha(c))
+            if (isalpha(c))
             {
                 estadoActual = Q1_identificador;
                 agregarCaracter(c);
                 break;
-                }
-            if(isdigit(c))
+            }
+            if (isdigit(c))
             {
                 estadoActual = Q2_constante;
                 agregarCaracter(c);
                 break;
-            }    
-            if(c == '+')
+            }
+            if (c == '+')
             {
                 estadoActual = Q3_adicion;
                 break;
             }
-             if (c == '*')
+            if (c == '*')
             {
                 estadoActual = Q4_producto;
                 break;
             }
-             if (c == '(')
+            if (c == '(')
             {
                 estadoActual = Q5_parizquierdo;
                 break;
             }
-             if (c == ')')
+            if (c == ')')
             {
                 estadoActual = Q6_parderecho;
-                break;    
+                break;
             }
-             if (c == '=')
+            if (c == '=')
             {
                 estadoActual = Q7_igual;
-                break;    
+                break;
             }
-             if (c == ':')
+            if (c == ':')
             {
                 estadoActual = Q8_asignacion;
-                break; 
-            }    
-             if (c == '\n'){
+                break;
+            }
+            if (c == '\n')
+            {
                 estadoActual = Q9_fds;
                 break;
-                }
+            }
 
-            estadoActual = Q11_error; 
+            estadoActual = Q11_error;
             break;
 
         case Q1_identificador:
             if ((!isalpha(c)) && (!isdigit(c)))
-            { 
+            {
                 estadoActual = Q0_inicial;
-                ungetc(c, stdin);            
+                ungetc(c, stdin);
+                agregarSimbolo(buffer,IDENTIFICADOR);
+                limpiarBuffer();
                 return IDENTIFICADOR;
             }
             agregarCaracter(c);
@@ -172,9 +118,9 @@ TOKEN scanner(void)
             if (!isdigit(c))
             {
                 estadoActual = Q0_inicial;
-                agregarCaracter(c);
                 ungetc(c, stdin);
-                mostrarBuffer();
+                agregarSimbolo(buffer,CONSTANTE);
+                limpiarBuffer();
                 return CONSTANTE;
             }
             agregarCaracter(c);
@@ -185,8 +131,7 @@ TOKEN scanner(void)
             ungetc(c, stdin);
             return SUMA;
 
-        case Q4_producto:
-            estadoActual = Q0_inicial;
+        case Q4_producto : estadoActual = Q0_inicial;
             ungetc(c, stdin);
             return MULTIPLICACION;
 
@@ -199,31 +144,39 @@ TOKEN scanner(void)
             estadoActual = Q0_inicial;
             ungetc(c, stdin);
             return PARENDERECHO;
-            
-        case Q7_igual: 
+
+        case Q7_igual:
             estadoActual = Q0_inicial;
             ungetc(c, stdin);
             return IGUAL;
 
         case Q8_asignacion:
-            if(c == '='){
-                estadoActual =  Q0_inicial;
+            if (c == '=')
+            {
+                estadoActual = Q0_inicial;
                 return ASIGNACION;
             }
 
         case Q9_fds:
-            if( c == '.')
-            return FDT;
+            estadoActual = Q0_inicial;
+            if (c == '\n')
+                return FDT;
+            ungetc(c, stdin);
             return FDS;
-            
+            break;
+
         case Q11_error:
             printf("ERROR LEXICO");
             c = EOF;
-            exit(0);    
-        }   
-    }    
+            exit(0);
+            break;
 
-}    
+        default:
+            printf("Lexical ERROR");
+            break;
+        }
+    }
+}
 
 void mostrar(TOKEN a)
 {
@@ -246,7 +199,7 @@ void mostrar(TOKEN a)
         break;
     case PARENDERECHO:
         printf("PARENDERECHO \n");
-        break;    
+        break;
     case IGUAL:
         printf("IGUAL \n");
         break;
@@ -258,10 +211,31 @@ void mostrar(TOKEN a)
         break;
     case FDT:
         printf("FDT \n");
-        break;    
+        break;
     default:
         printf("Not a token \n");
         break;
     }
 }
+void agregarCaracter(int c)
+{
+    buffer[punteroDeBuffer] = c;
+    punteroDeBuffer++;
+}
 
+void mostrarBuffer()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        printf(" [%d]", buffer[i]);
+    }
+}
+
+void limpiarBuffer()
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        buffer[i] = 0;
+    }
+    punteroDeBuffer = 0;
+}
