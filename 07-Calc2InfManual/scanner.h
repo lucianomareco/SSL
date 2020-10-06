@@ -1,3 +1,5 @@
+#if !defined TOKEN_H
+#define TOKEN_H
 typedef enum
 {   
     IDENTIFICADOR,
@@ -9,9 +11,10 @@ typedef enum
     SUMA,
     MULTIPLICACION,
     FDS,
-    FDT
+    FDT,
+    NAT
 } TOKEN;
 
-TOKEN Scanner(void);
+#endif
 
-void mostrar(TOKEN);
+TOKEN Scanner(void);
