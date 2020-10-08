@@ -1,7 +1,8 @@
 #if !defined TOKEN_H
 #define TOKEN_H
 typedef enum
-{   
+{
+    NAT,
     IDENTIFICADOR,
     CONSTANTE,
     ASIGNACION,
@@ -10,11 +11,12 @@ typedef enum
     PARENDERECHO,
     SUMA,
     MULTIPLICACION,
+    EXP,
     FDS,
-    FDT,
-    NAT
+    FDT
 } TOKEN;
 
 #endif
 
 TOKEN Scanner(void);
+void MostrarToken(TOKEN);
