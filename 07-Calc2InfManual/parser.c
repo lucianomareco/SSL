@@ -1,42 +1,94 @@
-#include "scanner.h"    
+#include "scanner.h"
+#include "parser.h"
+#include <stdlib.h>
 
-void Objetivo (void) {
-/* <objetivo> -> <programa> FDT */
- Programa();
- Match(FDT);
-}
-void Programa(void){
-    ListaDeSentencias();
+TOKEN t;
+
+void Parser()
+{
+Sentencias();
+printf("\n\n\t\t--- SINTAXIS CORRECTA ---\n");
 }
 
-void ListaSentencias (void) {
-    Sentencia(); 
-    while (1) { 
-        switch (ProximoToken()) {
-            case IDENTIFICADOR: case CONSTANTE: case PARENIZQUIERDO:
-            Sentencia(); 
-            break;
-        default:
+void Sentencias()
+{
+    t = Scanner();
+    switch (t)
+    {
+    case IDENTIFICADOR: 
+        Definicion();
+        Match(FDS);
+        break;
+    case EXP:
+        Expresion();    
+        TokenActual(FDS);
+        break;
+    case FDT:
+        return;    
+    default:
+        ErrorSintactico();          
+    }
+    Sentencias();
+}
+
+void Definicion()
+{
+    Match(ASIGNACION);
+    Match(CONSTANTE);
+}
+
+void Expresion (void) {
+ Primaria();
+ for (t = Scanner(); t == SUMA || t == MULTIPLICACION ; t = Scanner())
+    Primaria();
+}
+
+void Primaria(){
+    t = Scanner(); 
+    switch (t)
+    {
+        case IDENTIFICADOR:
         return;
-        } 
+        case CONSTANTE:
+        return;
+        case PARENIZQUIERDO:
+        while(t == PARENIZQUIERDO){
+                Expresion();
+                TokenActual(PARENDERECHO);
+        }   
+        return;
+        default:
+        ErrorSintactico();
+    }     
+}
+void Match(TOKEN tokenEsperado)
+{
+    TOKEN actualToken = Scanner();
+    if (actualToken != tokenEsperado)
+    {
+      printf("\n\nTOKEN ESPERADO: ");
+      MostrarToken(tokenEsperado);
+      printf("TOKEN RECIBIDO: ");
+      MostrarToken(actualToken);
+      printf("\n");
+      ErrorSintactico();
     }
 }
 
-void Sentencia(void) {
-    TOKEN tok = ProximoToken();
-    switch (tok) {
-        case IDENTIFICADOR: /* <sentencia> -> ID := <expresion>; */
-        Match(IDENTIFICADOR); Match(Asignación>)
-        break;
-        case LEER: /* <sentencia> -> LEER ( <listaIdentificadores> ); */
-        Match(LEER); Match(PARENIZQUIERDO); ListaIdentificadores();
-        Match(PARENDERECHO); Match(PUNTOYCOMA);
-        break;
-        case ESCRIBIR: /* <sentencia> -> ESCRIBIR (<listaExpresiones>); */
-        Match(ESCRIBIR); Match(PARENIZQUIERDO); ListaExpresiones();
-        Match(PARENDERECHO); Match(PUNTOYCOMA);
-        break;
-        default:
-        ErrorSintactico(tok); break;
+void TokenActual(TOKEN tokenEsperado){
+    if (tokenEsperado != t)
+    {
+      printf("\n\nTOKEN ESPERADO: ");
+      MostrarToken(tokenEsperado);
+      printf("TOKEN RECIBIDO: ");
+      MostrarToken(t);
+      printf("\n");
+      ErrorSintactico();
     }
 }
+
+void ErrorSintactico(){
+    printf("\nERROR SINTACTICO\n");
+    exit(1);
+}
+
