@@ -4,26 +4,21 @@
 
 int punteroDeSimbolo = 0;
 
-
 /*int main(void){
-
     int nom[8] = {46};
     int val[8] = {1,2,3,4,5,6,7,8};
     TOKEN c = CONSTANTE;
     TOKEN c2 = CONSTANTE;
     TOKEN c3 = IDENTIFICADOR;
     TOKEN c4 = CONSTANTE;
-
-    agregarSimbolo(nom, val, c);
-    agregarSimbolo(nom, val, c2);
-    agregarSimbolo(nom, val, c3);
-    agregarSimbolo(nom, val, c4);
-    mostrarTablaSimbolos();
-
+    AgregarSimbolo(nom, val, c);
+    AgregarSimbolo(nom, val, c2);
+    AgregarSimbolo(nom, val, c3);
+    AgregarSimbolo(nom, val, c4);
+    MostrarTablaSimbolos();
 }*/
 
-
-void agregarSimbolo(int valor[8], TOKEN tipo)
+void AgregarSimbolo(int valor[8], TOKEN tipo)
 {
     if (tipo == IDENTIFICADOR)
         SetNombre(valor);
@@ -37,13 +32,13 @@ void agregarSimbolo(int valor[8], TOKEN tipo)
 
 void SetNombre(int nombre[])
 {
-    for (unsigned i = 0; i<8; ++i)
+    for (unsigned i = 0; i < 8; ++i)
         tablaDeSimbolos[punteroDeSimbolo].nombre[i] = nombre[i];
 }
 
 void SetValor(int valor[])
 {
-    for (unsigned i = 0; i<8; ++i)
+    for (unsigned i = 0; i < 8; ++i)
         tablaDeSimbolos[punteroDeSimbolo].valor[i] = valor[i];
 }
 
@@ -52,33 +47,36 @@ void SetTipo(TOKEN tipo)
     tablaDeSimbolos[punteroDeSimbolo].tipo = tipo;
 }
 
-void mostrarTablaSimbolos()
+void MostrarTablaSimbolos()
 {
-    for (unsigned i = 0; i < 8 ; ++i)
+    for (unsigned i = 0; i < 8; ++i)
     {
-        if(tablaDeSimbolos[i].tipo ==  IDENTIFICADOR)
-        printf("IDENTIFICADOR \t");
-
-        if(tablaDeSimbolos[i].tipo == CONSTANTE)
-        printf("CONSTANTE \t");
-
-        mostrarNombre(tablaDeSimbolos[i].nombre);
+        if (tablaDeSimbolos[i].tipo == IDENTIFICADOR)
+            printf("IDENTIFICADOR \t");
+        else if (tablaDeSimbolos[i].tipo == CONSTANTE)
+            printf("CONSTANTE \t");
+        else
+            return;
+        MostrarNombre(tablaDeSimbolos[i].nombre);
         printf("\t");
-        mostrarValor(tablaDeSimbolos[i].valor);
+        MostrarValor(tablaDeSimbolos[i].valor);
         printf("\n");
     }
 }
 
-
-void mostrarNombre(int nombre[8]){
-        for (int i = 0; i < 8; i++)
+void MostrarNombre(int nombre[8])
+{
+    for (int i = 0; i < 8; i++)
         printf(" [%d]", nombre[i]);
 }
 
-void mostrarValor(int valor[8]){
-        for (int i = 0; i < 8; i++){
-        if(valor[i] == 0)
-        printf("[0]");
-        else printf("[%d]",(valor[i] - '0'));
-        }
+void MostrarValor(int valor[8])
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (valor[i] == 0)
+            printf("[0]");
+        else
+            printf("[%d]", (valor[i] - '0'));
+    }
 }
