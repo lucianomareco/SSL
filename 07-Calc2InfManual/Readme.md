@@ -3,7 +3,7 @@
 ### Descripción del lenguaje utilizado
 
 - El único tipo de dato es natural incluyendo el 0.
-- Todos los identificadores son declarados explicitamente y con una longitud máxima de 32 caracteres.
+- Todos los identificadores son declarados explicitamente y con una longitud máxima de 8 caracteres.
 - Los identificadores deben comenzar con una letra y están compuestos de letras y dígitos.
 - Las constantes son secuencias de dígitos.
 - Hay dos tipos de sentencias:
