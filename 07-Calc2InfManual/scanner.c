@@ -16,34 +16,32 @@ typedef enum
     Q6_parderecho,
     Q7_igual,
     Q8_asignacion,
-    Q9_fds,
-    Q10_fdt,
-    Q11_error
+    Q9_expresion,
+    Q10_fds,
+    Q11_fdt,
+    Q12_error
 } Estado;
 
-void mostrar(TOKEN);
-TOKEN scanner(void);
-void agregarCaracter(int);
 
-void mostrarBuffer();
-void limpiarBuffer();
+TOKEN Scanner(void);
+void AgregarCaracter(int);
+
+void MostrarBuffer();
+void LimpiarBuffer();
 int buffer[8] = {0};
 int punteroDeBuffer = 0;
 
+// int main(void)
+// {
+//     TOKEN t;
 
+//     while ((t = Scanner()) != FDT)
+//         MostrarToken(t);
 
+//     MostrarTablaSimbolos();
+// }
 
-int main(void)
-{
-    TOKEN t;
-
-    while ((t = scanner()) != FDT)
-        mostrar(t);
-
-    mostrarTablaSimbolos();
-}
-
-TOKEN scanner(void)
+TOKEN Scanner(void)
 {
     static Estado estadoActual = Q0_inicial;
     char c;
@@ -55,13 +53,13 @@ TOKEN scanner(void)
             if (isalpha(c))
             {
                 estadoActual = Q1_identificador;
-                agregarCaracter(c);
+                AgregarCaracter(c);
                 break;
             }
             if (isdigit(c))
             {
                 estadoActual = Q2_constante;
-                agregarCaracter(c);
+                AgregarCaracter(c);
                 break;
             }
             if (c == '+')
@@ -94,13 +92,24 @@ TOKEN scanner(void)
                 estadoActual = Q8_asignacion;
                 break;
             }
-            if (c == '\n')
+            if (c == '$')
             {
-                estadoActual = Q9_fds;
+                estadoActual = Q9_expresion;
+                break;
+            }            
+            if (c == '.')
+            {
+                estadoActual = Q10_fds;
                 break;
             }
 
-            estadoActual = Q11_error;
+            if (c == '\n')
+            {
+                estadoActual = Q11_fdt;
+                break;        
+            }
+
+            estadoActual = Q12_error;
             break;
 
         case Q1_identificador:
@@ -108,22 +117,22 @@ TOKEN scanner(void)
             {
                 estadoActual = Q0_inicial;
                 ungetc(c, stdin);
-                agregarSimbolo(buffer,IDENTIFICADOR);
-                limpiarBuffer();
+                AgregarSimbolo(buffer, IDENTIFICADOR);
+                LimpiarBuffer();
                 return IDENTIFICADOR;
             }
-            agregarCaracter(c);
+            AgregarCaracter(c);
             break;
         case Q2_constante:
             if (!isdigit(c))
             {
                 estadoActual = Q0_inicial;
                 ungetc(c, stdin);
-                agregarSimbolo(buffer,CONSTANTE);
-                limpiarBuffer();
+                AgregarSimbolo(buffer, CONSTANTE);
+                LimpiarBuffer();
                 return CONSTANTE;
             }
-            agregarCaracter(c);
+            AgregarCaracter(c);
             break;
 
         case Q3_adicion:
@@ -131,7 +140,8 @@ TOKEN scanner(void)
             ungetc(c, stdin);
             return SUMA;
 
-        case Q4_producto : estadoActual = Q0_inicial;
+        case Q4_producto:
+            estadoActual = Q0_inicial;
             ungetc(c, stdin);
             return MULTIPLICACION;
 
@@ -156,16 +166,27 @@ TOKEN scanner(void)
                 estadoActual = Q0_inicial;
                 return ASIGNACION;
             }
-
-        case Q9_fds:
+            estadoActual = Q12_error;
+            break;
+        case Q9_expresion:
             estadoActual = Q0_inicial;
-            if (c == '\n')
-                return FDT;
+            ungetc(c, stdin);
+            return EXP;    
+
+        case Q10_fds:
+            estadoActual = Q0_inicial;
             ungetc(c, stdin);
             return FDS;
             break;
 
-        case Q11_error:
+        case Q11_fdt:
+            if(c == '\n')
+                return FDT;
+            estadoActual = Q0_inicial;
+            ungetc(c, stdin);
+            break;
+
+        case Q12_error:
             printf("ERROR LEXICO");
             c = EOF;
             exit(0);
@@ -178,7 +199,7 @@ TOKEN scanner(void)
     }
 }
 
-void mostrar(TOKEN a)
+void MostrarToken(TOKEN a)
 {
     switch (a)
     {
@@ -217,13 +238,13 @@ void mostrar(TOKEN a)
         break;
     }
 }
-void agregarCaracter(int c)
+void AgregarCaracter(int c)
 {
     buffer[punteroDeBuffer] = c;
     punteroDeBuffer++;
 }
 
-void mostrarBuffer()
+void MostrarBuffer()
 {
     for (int i = 0; i < 8; i++)
     {
@@ -231,7 +252,7 @@ void mostrarBuffer()
     }
 }
 
-void limpiarBuffer()
+void LimpiarBuffer()
 {
     for (int i = 0; i < 8; ++i)
     {
