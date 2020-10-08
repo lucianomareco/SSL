@@ -1,5 +1,17 @@
 # Calculadora 2
 
+### Descripción del lenguaje utilizado
+
+- El único tipo de dato es natural incluyendo el 0.
+- Todos los identificadores son declarados explicitamente y con una longitud máxima de 32 caracteres.
+- Los identificadores deben comenzar con una letra y están compuestos de letras y dígitos.
+- Las constantes son secuencias de dígitos.
+- Hay dos tipos de sentencias:
+    - **Asignación** Identificador := Constante
+    - **Consulta** Expresion =
+- Cada sentencia termina con un "enter" (/n).
+- El final de texto (fdt) será dado por dos "enter" consecuitivos (/n/n) 
+
 
 ### Gramática Léxica
 
@@ -21,12 +33,18 @@
 ### Gramática Sintáctica
 
 ~~~
-<programa> -> <sentencia> {<sentencia>}
-<sentencia> -> <identificador> := <constante> ; |
-               <expresion> =
-<expresión> -> <primaria> {<operadorAditivo> | <operadorMultiplicador> <primaria>}
-<primaria> -> <identificador> | <constante> |( <expresión> )
-~~~
+<parser> -> <sentencias> 
+<sentencias> -> <asignación> FDS | <expresion> FDS | <sentencias>
+<asignacion> -> ID ASIGNACION CONSTANTE
+<expresión> -> $ <primaria> { +|*  <primaria>}
+<primaria> -> IDENTIFICADOR | CONSTANTE | ( <expresion> )
+
+
+<expresión> -> <primaria> {<operadorAditivo> <primaria>}
+<primaria> -> <identificador> | <constante> |
+ ( <expresión> )
+
+
 
 | En la entrada | Nombre del Token |
 |---------------|------------------|
@@ -36,3 +54,7 @@
 | ) | PARENDERECHO |
 | + | SUMA |
 | * | MULTIPLICACION |
+| . | FDS |
+| $ | EXP|
+| /n/n | FDT |
+
