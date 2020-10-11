@@ -16,14 +16,19 @@ void Sentencias()
     switch (t)
     {
     case IDENTIFICADOR: 
+     printf("match ID OK: ");
         Definicion();
         Match(FDS);
+         printf("match FDS OK: ");
         break;
     case EXP:
+     printf("match EXP OK: ");
         Expresion();    
         TokenActual(FDS);
+         printf("match FDS OK: ");
         break;
     case FDT:
+     printf("match FDT OK: ");
         return;    
     default:
         ErrorSintactico();          
@@ -34,12 +39,15 @@ void Sentencias()
 void Definicion()
 {
     Match(ASIGNACION);
+     printf("match ASIGNACION OK: ");
     Match(CONSTANTE);
+     printf("match CONSTANTE OK: ");
 }
 
 void Expresion (void) {
  Primaria();
  for (t = Scanner(); t == SUMA || t == MULTIPLICACION ; t = Scanner())
+     printf("match OP OK: ");
     Primaria();
 }
 
@@ -48,13 +56,17 @@ void Primaria(){
     switch (t)
     {
         case IDENTIFICADOR:
+         printf("match ID OK: ");
         return;
         case CONSTANTE:
+         printf("match CONST OK: ");
         return;
         case PARENIZQUIERDO:
         while(t == PARENIZQUIERDO){
+                printf("match ( OK: ");
                 Expresion();
                 TokenActual(PARENDERECHO);
+                 printf("match ) OK: ");
         }   
         return;
         default:
