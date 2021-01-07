@@ -1,10 +1,22 @@
 #include "scanner.h"
-#include "simbolos.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include "memory.h"
+#include <stdio.h>  //  printf(debug)- getchar
+#include <stdlib.h> // atoi
+#include <ctype.h>  // isalpha - isdigit
+#include <string.h> // strcopy
 
-//----------------- ESTADOS ---------------
+void mostrarTipo(TOKEN);
+
+//-------------- PROTOTIPOS BUFFER ---------------//
+void AddCharacter(char);
+void ShowBuffer();
+void CleanBuffer();
+char buffer[10] = {0};
+int bufferIndex = 0;
+//-------------- PROTOTIPOS TOKENS ---------------//
+TOKEN CreateToken(tipoDeToken, char[]);
+
+//----------------- ESTADOS ---------------//
 typedef enum
 {
     Q0_inicial,
@@ -20,243 +32,264 @@ typedef enum
     Q10_fds,
     Q11_fdt,
     Q12_error
-} Estado;
+} State;
 
+//---------- MAIN PARA DEBUG ---------//
+//int main(void)
+//{
+//    TOKEN t;
+//   while ((t = Scanner()).type != FDT)
+//    {
+//        mostrarTipo(t);
+//        printf("  ");
+//    };
+//    return 0;
+//}
 
-TOKEN Scanner(void);
-void AgregarCaracter(int);
-
-void MostrarBuffer();
-void LimpiarBuffer();
-int buffer[8] = {0};
-int punteroDeBuffer = 0;
-
-// int main(void)
-// {
-//     TOKEN t;
-
-//     while ((t = Scanner()) != FDT)
-//         MostrarToken(t);
-
-//     MostrarTablaSimbolos();
-// }
-
+//---------- SCANNER -----------//
 TOKEN Scanner(void)
 {
-    static Estado estadoActual = Q0_inicial;
+    static State actualState = Q0_inicial;
+    static TOKEN arrivingToken;
     char c;
     while ((c = getchar()) != EOF)
     {
-        switch (estadoActual)
+        switch (actualState)
         {
         case Q0_inicial:
             if (isalpha(c))
             {
-                estadoActual = Q1_identificador;
-                AgregarCaracter(c);
+                actualState = Q1_identificador;
+                AddCharacter(c);
                 break;
             }
             if (isdigit(c))
             {
-                estadoActual = Q2_constante;
-                AgregarCaracter(c);
+                actualState = Q2_constante;
+                AddCharacter(c);
                 break;
             }
             if (c == '+')
             {
-                estadoActual = Q3_adicion;
+                actualState = Q3_adicion;
                 break;
             }
             if (c == '*')
             {
-                estadoActual = Q4_producto;
+                actualState = Q4_producto;
                 break;
             }
             if (c == '(')
             {
-                estadoActual = Q5_parizquierdo;
+                actualState = Q5_parizquierdo;
                 break;
             }
             if (c == ')')
             {
-                estadoActual = Q6_parderecho;
+                actualState = Q6_parderecho;
                 break;
             }
             if (c == '=')
             {
-                estadoActual = Q7_igual;
+                actualState = Q7_igual;
                 break;
             }
             if (c == ':')
             {
-                estadoActual = Q8_asignacion;
+                actualState = Q8_asignacion;
                 break;
             }
             if (c == '$')
             {
-                estadoActual = Q9_expresion;
+                actualState = Q9_expresion;
                 break;
-            }            
+            }
             if (c == '.')
             {
-                estadoActual = Q10_fds;
+                actualState = Q10_fds;
                 break;
             }
-
             if (c == '\n')
             {
-                estadoActual = Q11_fdt;
-                break;        
+                actualState = Q11_fdt;
+                break;
             }
-
-            estadoActual = Q12_error;
+            actualState = Q12_error;
             break;
 
         case Q1_identificador:
             if ((!isalpha(c)) && (!isdigit(c)))
             {
-                estadoActual = Q0_inicial;
+                actualState = Q0_inicial;
                 ungetc(c, stdin);
-                AgregarSimbolo(buffer, IDENTIFICADOR);
-                LimpiarBuffer();
-                return IDENTIFICADOR;
+                arrivingToken = CreateToken(IDENTIFICADOR, buffer);
+                CleanBuffer();
+                return arrivingToken;
             }
-            AgregarCaracter(c);
+            AddCharacter(c);
             break;
         case Q2_constante:
             if (!isdigit(c))
             {
-                estadoActual = Q0_inicial;
+                actualState = Q0_inicial;
                 ungetc(c, stdin);
-                AgregarSimbolo(buffer, CONSTANTE);
-                LimpiarBuffer();
-                return CONSTANTE;
+                arrivingToken = CreateToken(CONSTANTE, buffer);
+                CleanBuffer();
+                return arrivingToken;
             }
-            AgregarCaracter(c);
+            AddCharacter(c);
             break;
 
         case Q3_adicion:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return SUMA;
+            arrivingToken = CreateToken(SUMA, buffer);
+            return arrivingToken;
 
         case Q4_producto:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return MULTIPLICACION;
+            arrivingToken = CreateToken(MULTIPLICACION, buffer);
+            CleanBuffer();
+            return arrivingToken;
 
         case Q5_parizquierdo:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return PARENIZQUIERDO;
+            arrivingToken = CreateToken(PARENIZQUIERDO, buffer);
+            return arrivingToken;
 
         case Q6_parderecho:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return PARENDERECHO;
+            arrivingToken = CreateToken(PARENDERECHO, buffer);
+            return arrivingToken;
 
         case Q7_igual:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return IGUAL;
+            arrivingToken = CreateToken(IGUAL, buffer);
+            return arrivingToken;
 
         case Q8_asignacion:
             if (c == '=')
             {
-                estadoActual = Q0_inicial;
-                return ASIGNACION;
+                actualState = Q0_inicial;
+                arrivingToken = CreateToken(ASIGNACION, buffer);
+                return arrivingToken;
             }
-            estadoActual = Q12_error;
+            actualState = Q12_error;
             break;
         case Q9_expresion:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return EXP;    
+            arrivingToken = CreateToken(EXP, buffer);
+            return arrivingToken;
 
         case Q10_fds:
-            estadoActual = Q0_inicial;
+            actualState = Q0_inicial;
             ungetc(c, stdin);
-            return FDS;
-            break;
+            arrivingToken = CreateToken(FDS, buffer);
+            return arrivingToken;
 
         case Q11_fdt:
-            if(c == '\n')
-                return FDT;
-            estadoActual = Q0_inicial;
+            if (c == '\n')
+            {
+                arrivingToken = CreateToken(FDT, buffer);
+                return arrivingToken;
+            }
+            actualState = Q0_inicial;
             ungetc(c, stdin);
             break;
 
         case Q12_error:
-            printf("ERROR LEXICO");
+            printf("[SCANNER] LEXICAL ERROR");
             c = EOF;
             exit(0);
             break;
 
         default:
-            printf("Lexical ERROR");
+            printf("[SCANNER] LEXICAL ERROR");
             break;
         }
     }
 }
 
-void MostrarToken(TOKEN a)
+//---------- BUFFER ------------//
+void AddCharacter(char c)
 {
-    switch (a)
-    {
-    case IDENTIFICADOR:
-        printf("IDENTIFICADOR\n");
-        break;
-    case CONSTANTE:
-        printf("CONSTANTE\n");
-        break;
-    case SUMA:
-        printf("ADICION\n");
-        break;
-    case MULTIPLICACION:
-        printf("MULTIPLICACION\n");
-        break;
-    case PARENIZQUIERDO:
-        printf("PARENIZQUIERDO\n");
-        break;
-    case PARENDERECHO:
-        printf("PARENDERECHO \n");
-        break;
-    case IGUAL:
-        printf("IGUAL \n");
-        break;
-    case ASIGNACION:
-        printf("ASIGNACION \n");
-        break;
-    case FDS:
-        printf("FDS \n");
-        break;
-    case FDT:
-        printf("FDT \n");
-        break;
-    default:
-        printf("Not a token \n");
-        break;
-    }
+    buffer[bufferIndex] = c;
+    bufferIndex++;
 }
-void AgregarCaracter(int c)
-{
-    buffer[punteroDeBuffer] = c;
-    punteroDeBuffer++;
-}
-
-void MostrarBuffer()
+void ShowBuffer()
 {
     for (int i = 0; i < 8; i++)
     {
         printf(" [%d]", buffer[i]);
     }
 }
-
-void LimpiarBuffer()
+void CleanBuffer()
 {
     for (int i = 0; i < 8; ++i)
     {
         buffer[i] = 0;
     }
-    punteroDeBuffer = 0;
+    bufferIndex = 0;
+}
+
+//---------- MANEJO DE TOKENS ------//
+
+TOKEN CreateToken(tipoDeToken tipo, char buffer[])
+{
+    TOKEN newToken;
+    if (tipo == IDENTIFICADOR)
+        strcpy(newToken.data.name, buffer);
+    if (tipo == CONSTANTE)
+        newToken.data.value = atoi(buffer);
+    newToken.type = tipo;
+    return newToken;
+}
+
+void mostrarTipo(TOKEN t)
+{
+
+    switch (t.type)
+    {
+    case IDENTIFICADOR:
+        printf("IDENTIFICADOR");
+        break;
+    case CONSTANTE:
+        printf("CONSTANTE");
+        break;
+    case PARENDERECHO:
+        printf("PARENDERECHO");
+        break;
+    case PARENIZQUIERDO:
+        printf("PARENIZQUIERDO");
+        break;
+    case ASIGNACION:
+        printf("ASIGNACION");
+        break;
+    case IGUAL:
+        printf("IGUAL");
+        break;
+    case FDS:
+        printf("FDS");
+        break;
+    case FDT:
+        printf("FDT");
+        break;
+    case MULTIPLICACION:
+        printf("MULTIPLICACION");
+        break;
+    case SUMA:
+        printf("SUMA");
+        break;
+    case NAT:
+        printf("NAT");
+        break;
+    default:
+        printf("otro");
+        break;
+    }
 }
