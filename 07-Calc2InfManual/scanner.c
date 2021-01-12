@@ -35,16 +35,16 @@ typedef enum
 } State;
 
 //---------- MAIN PARA DEBUG ---------//
-//int main(void)
-//{
-//    TOKEN t;
-//   while ((t = Scanner()).type != FDT)
-//    {
-//        mostrarTipo(t);
-//        printf("  ");
-//    };
-//    return 0;
-//}
+int main(void)
+{
+    TOKEN t;
+    while ((t = Scanner()).type != FDT)
+    {
+        mostrarTipo(t);
+        printf("  ");
+    };
+    return 0;
+}
 
 //---------- SCANNER -----------//
 TOKEN Scanner(void)
