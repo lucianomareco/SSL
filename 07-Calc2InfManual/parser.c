@@ -38,15 +38,17 @@ void Sentencias()
 
 void unaSentencia()
 {
+    int resultado;
     t = GetNextToken();
     switch (t.type)
     {
     case DEF:         //Definición
         Definicion(); //Se asocia valor a identificador.
         break;
-    case IDENTIFICADOR:                        //Expresión
-    case CONSTANTE:                            //Expresión
-        printf("Resultado = %d", Expresion()); //Expresión que luego será evaluada
+    case IDENTIFICADOR: //Expresión
+    case CONSTANTE:
+        resultado = Expresion();                //Expresión
+        printf("\n Resultado = %d", resultado); //Expresión que luego será evaluada
         break;
     default:
         break;
@@ -67,14 +69,17 @@ void Definicion()
 int Expresion(void)
 {
     int resultado = Termino();
-    switch ((t = GetNextToken()).type)
+    switch (t.type)
     {
     case SUMA: //Matcheo SUMA
-        resultado = resultado + Expresion();
-        return resultado; //Por gramática: <termino> { SUMA <expresión> }*
+        printf("\n entro a la suma ");
+        resultado = resultado + Termino();
     default:
-        return resultado; //Devuelvo resultado si lo único expresado fue el término
+        break;
     }
+
+    printf("\n resultado de Expresion %d", resultado);
+    return resultado;
 }
 
 int Termino(void)
@@ -83,11 +88,13 @@ int Termino(void)
     switch ((t = GetNextToken()).type)
     {
     case MULTIPLICACION: //Matcheo MULTIPLICACIÓN
-        resultado = resultado * Termino();
-        return resultado; //Por gramática: factor { MULTIPLICACION <término> }*
+        resultado = resultado * Factor();
+        break; //Por gramática: factor { MULTIPLICACION <factor> }*
     default:
-        return resultado; //Devuelvo resultado si lo único expresado fue el factor
+        break;
     }
+    printf("\n resultado de Termino %d", resultado);
+    return resultado;
 }
 
 int Factor(void)
@@ -97,48 +104,36 @@ int Factor(void)
     {
     case IDENTIFICADOR: //Matcheo IDENTIFICADOR
         resultado = GetValue(t.data.name);
-        return resultado;         //Retorno el valor de la variable en memoria.
+        break;                    //Retorno el valor de la variable en memoria.
     case CONSTANTE:               //Matcheo CONSTANTE
         resultado = t.data.value; //Obtengo valor de la constante
-        return resultado;
+        break;
     case PARENIZQUIERDO:         //Matcheo PARENIZQUIERDO
         resultado = Expresion(); //Por gramática: <factor> | PARENIZQUIERDO <expresion> PARENDERECHO
         Match(PARENDERECHO);     //Matcheo PARENDERECHO
-        return resultado;
+        break;
     default:
-        return resultado;
+        break;
     }
+    printf("\n resultado de Factor %d", resultado);
+    return resultado;
 }
 
 //--------------------------------------------------------------------
-static void Match(tipoDeToken tipoEsperado) // REFACTORIZAR para evitar logica duplicada con TokenActual
+static void Match(tipoDeToken tipoEsperado)
 {
     t = GetNextToken();
     if (t.type != tipoEsperado)
     {
-        printf("\nR ");
+        printf("\nRecibido ");
         mostrarTipo(t.type);
-        printf("\nE ");
+        printf("\nEsperado ");
         mostrarTipo(tipoEsperado);
 
         ErrorSintactico();
     }
     mostrarTipo(t.type);
 }
-
-// void TokenActual(tipoDeToken tipoEsperado)
-// {
-//     if (t.type != tipoEsperado)
-//     {
-//         printf("\nR ");
-//         mostrarTipo(t.type);
-//         printf("\nE ");
-//         mostrarTipo(tipoEsperado);
-
-//         ErrorSintactico();
-//     }
-//     mostrarTipo(t.type);
-// }
 
 void ErrorSintactico()
 {
@@ -148,7 +143,7 @@ void ErrorSintactico()
 
 void mostrarTipo(tipoDeToken tipo)
 {
-
+    printf(" ");
     switch (tipo)
     {
     case IDENTIFICADOR:
