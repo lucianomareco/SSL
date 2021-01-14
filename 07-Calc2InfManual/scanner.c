@@ -1,18 +1,28 @@
 #include "scanner.h"
-#include "memory.h"
-#include <stdio.h>  //  printf(debug)- getchar
-#include <stdlib.h> // atoi
-#include <ctype.h>  // isalpha - isdigit
-#include <string.h> // strcopy
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
-void mostrarTipo(TOKEN);
+//void mostrarTipo(TOKEN);
 
 //-------------- PROTOTIPOS BUFFER ---------------//
 void AddCharacter(char);
+char buffer[10] = {
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0',
+    '\0'};
 void ShowBuffer();
 void CleanBuffer();
-char buffer[10] = {0};
 int bufferIndex = 0;
+
 //-------------- PROTOTIPOS TOKENS ---------------//
 TOKEN CreateToken(tipoDeToken, char[]);
 
@@ -27,27 +37,26 @@ typedef enum
     Q5_parizquierdo,
     Q6_parderecho,
     Q7_igual,
-    Q8_asignacion,
-    Q9_expresion,
+    Q9_definicion,
     Q10_fds,
     Q11_fdt,
     Q12_error
 } State;
 
-//---------- MAIN PARA DEBUG ---------//
-int main(void)
-{
-    TOKEN t;
-    while ((t = Scanner()).type != FDT)
-    {
-        mostrarTipo(t);
-        printf("  ");
-    };
-    return 0;
-}
+//----------MAIN PARA DEBUG-- ------- //
+// int main(void)
+// {
+//     TOKEN t;
+//     while ((t = GetNextToken()).type != FDT)
+//     {
+//         mostrarTipo(t);
+//     };
+//     printf("\n\n");
+//     return 0;
+// }
 
-//---------- SCANNER -----------//
-TOKEN Scanner(void)
+//---------- GetNextToken -----------//
+TOKEN GetNextToken(void)
 {
     static State actualState = Q0_inicial;
     static TOKEN arrivingToken;
@@ -94,17 +103,12 @@ TOKEN Scanner(void)
                 actualState = Q7_igual;
                 break;
             }
-            if (c == ':')
-            {
-                actualState = Q8_asignacion;
-                break;
-            }
             if (c == '$')
             {
-                actualState = Q9_expresion;
+                actualState = Q9_definicion;
                 break;
             }
-            if (c == '.')
+            if (c == ';')
             {
                 actualState = Q10_fds;
                 break;
@@ -124,6 +128,7 @@ TOKEN Scanner(void)
                 ungetc(c, stdin);
                 arrivingToken = CreateToken(IDENTIFICADOR, buffer);
                 CleanBuffer();
+                printf("\nToken Consumido");
                 return arrivingToken;
             }
             AddCharacter(c);
@@ -135,6 +140,7 @@ TOKEN Scanner(void)
                 ungetc(c, stdin);
                 arrivingToken = CreateToken(CONSTANTE, buffer);
                 CleanBuffer();
+                printf("\nToken Consumido");
                 return arrivingToken;
             }
             AddCharacter(c);
@@ -144,6 +150,7 @@ TOKEN Scanner(void)
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(SUMA, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q4_producto:
@@ -151,51 +158,49 @@ TOKEN Scanner(void)
             ungetc(c, stdin);
             arrivingToken = CreateToken(MULTIPLICACION, buffer);
             CleanBuffer();
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q5_parizquierdo:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(PARENIZQUIERDO, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q6_parderecho:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(PARENDERECHO, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q7_igual:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(IGUAL, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
-        case Q8_asignacion:
-            if (c == '=')
-            {
-                actualState = Q0_inicial;
-                arrivingToken = CreateToken(ASIGNACION, buffer);
-                return arrivingToken;
-            }
-            actualState = Q12_error;
-            break;
-        case Q9_expresion:
+        case Q9_definicion:
             actualState = Q0_inicial;
             ungetc(c, stdin);
-            arrivingToken = CreateToken(EXP, buffer);
+            arrivingToken = CreateToken(DEF, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q10_fds:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(FDS, buffer);
+            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q11_fdt:
             if (c == '\n')
             {
                 arrivingToken = CreateToken(FDT, buffer);
+                printf("\nToken Consumido");
                 return arrivingToken;
             }
             actualState = Q0_inicial;
@@ -250,46 +255,43 @@ TOKEN CreateToken(tipoDeToken tipo, char buffer[])
     return newToken;
 }
 
-void mostrarTipo(TOKEN t)
-{
+// void mostrarTipo(TOKEN t)
+// {
 
-    switch (t.type)
-    {
-    case IDENTIFICADOR:
-        printf("IDENTIFICADOR");
-        break;
-    case CONSTANTE:
-        printf("CONSTANTE");
-        break;
-    case PARENDERECHO:
-        printf("PARENDERECHO");
-        break;
-    case PARENIZQUIERDO:
-        printf("PARENIZQUIERDO");
-        break;
-    case ASIGNACION:
-        printf("ASIGNACION");
-        break;
-    case IGUAL:
-        printf("IGUAL");
-        break;
-    case FDS:
-        printf("FDS");
-        break;
-    case FDT:
-        printf("FDT");
-        break;
-    case MULTIPLICACION:
-        printf("MULTIPLICACION");
-        break;
-    case SUMA:
-        printf("SUMA");
-        break;
-    case NAT:
-        printf("NAT");
-        break;
-    default:
-        printf("otro");
-        break;
-    }
-}
+//     switch (t.type)
+//     {
+//     case IDENTIFICADOR:
+//         printf("IDENTIFICADOR");
+//         break;
+//     case CONSTANTE:
+//         printf("CONSTANTE");
+//         break;
+//     case SUMA:
+//         printf("SUMA");
+//         break;
+//     case MULTIPLICACION:
+//         printf("MULTIPLICACION");
+//         break;
+//     case IGUAL:
+//         printf("IGUAL");
+//         break;
+//     case PARENDERECHO:
+//         printf("PARENDERECHO");
+//         break;
+//     case PARENIZQUIERDO:
+//         printf("PARENIZQUIERDO");
+//         break;
+//     case DEF:
+//         printf("DEF");
+//         break;
+//     case FDS:
+//         printf("FDS");
+//         break;
+//     case FDT:
+//         printf("FDT");
+//         break;
+//     default:
+//         printf("NAT");
+//         break;
+//     }
+// }
