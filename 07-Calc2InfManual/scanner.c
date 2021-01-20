@@ -128,7 +128,6 @@ TOKEN GetNextToken(void)
                 ungetc(c, stdin);
                 arrivingToken = CreateToken(IDENTIFICADOR, buffer);
                 CleanBuffer();
-                printf("\nToken Consumido");
                 return arrivingToken;
             }
             AddCharacter(c);
@@ -140,7 +139,6 @@ TOKEN GetNextToken(void)
                 ungetc(c, stdin);
                 arrivingToken = CreateToken(CONSTANTE, buffer);
                 CleanBuffer();
-                printf("\nToken Consumido");
                 return arrivingToken;
             }
             AddCharacter(c);
@@ -150,7 +148,6 @@ TOKEN GetNextToken(void)
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(SUMA, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q4_producto:
@@ -158,49 +155,42 @@ TOKEN GetNextToken(void)
             ungetc(c, stdin);
             arrivingToken = CreateToken(MULTIPLICACION, buffer);
             CleanBuffer();
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q5_parizquierdo:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(PARENIZQUIERDO, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q6_parderecho:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(PARENDERECHO, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q7_igual:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(IGUAL, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q9_definicion:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(DEF, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q10_fds:
             actualState = Q0_inicial;
             ungetc(c, stdin);
             arrivingToken = CreateToken(FDS, buffer);
-            printf("\nToken Consumido");
             return arrivingToken;
 
         case Q11_fdt:
             if (c == '\n')
             {
                 arrivingToken = CreateToken(FDT, buffer);
-                printf("\nToken Consumido");
                 return arrivingToken;
             }
             actualState = Q0_inicial;
