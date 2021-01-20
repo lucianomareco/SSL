@@ -3,26 +3,26 @@
 #include "memory.h"
 #include <stdlib.h>
 
-void mostrarTipo(tipoDeToken);
+void ShowType(tipoDeToken);
 
 TOKEN t; //TOKEN OBTENIDO
 
 //Prototipos de funciones privadas
 static void Match(tipoDeToken);
-//void TokenActual(tipoDeToken);
+static void ActualMatch(tipoDeToken tipoEsperado);
 void Sentencias(void);
 void unaSentencia(void);
 void Definicion(void);
 int Expresion(void);
 int Termino(void);
 int Factor(void);
-void ErrorSintactico(void);
+void SyntaxError(void);
 
 //Definición de función pública
 void Parser()
 {
     Sentencias();
-    printf("\n\n\t\t--- SINTAXIS CORRECTA ---\n\n");
+    printf("\n\n\t\t--- FIN DEL PROGRAMA ---\n\n");
 }
 
 //Definiciones de funciones privadas
@@ -51,11 +51,12 @@ void unaSentencia()
         resultado = Expresion();                //Expresión
         printf("\n Resultado = %d", resultado); //Expresión que luego será evaluada
         break;
-
+    case FDT:
+        return;
     default:
         break;
     }
-    Match(FDS);
+    ActualMatch(FDS);
     printf("\nEsperando nueva sentencia...\n");
 }
 
@@ -73,29 +74,20 @@ int Expresion(void)
     int resultado = Termino();
     while (t.type == SUMA)
     {
-        printf("\n entro a la suma ");
         t = GetNextToken();
         resultado = resultado + Termino();
     }
-
-    printf("\n resultado de Expresion %d", resultado);
     return resultado;
 }
 
 int Termino(void)
 {
     int resultado = Factor();
-    switch ((t = GetNextToken()).type)
+    while (t.type == MULTIPLICACION)
     {
-    case MULTIPLICACION: //Matcheo MULTIPLICACIÓN
         t = GetNextToken();
         resultado = resultado * Factor();
-        t = GetNextToken();
-        break; //Por gramática: factor { MULTIPLICACION <factor> }*
-    default:
-        break;
     }
-    printf("\n resultado de Termino %d", resultado);
     return resultado;
 }
 
@@ -106,28 +98,21 @@ int Factor(void)
     {
     case IDENTIFICADOR: //Matcheo IDENTIFICADOR
         resultado = GetValue(t.data.name);
+        t = GetNextToken();
         break;                    //Retorno el valor de la variable en memoria.
     case CONSTANTE:               //Matcheo CONSTANTE
         resultado = t.data.value; //Obtengo valor de la constante
+        t = GetNextToken();
         break;
-    case PARENIZQUIERDO: //Matcheo PARENIZQUIERDO
-        printf("matcheo con el par izqjj\n");
+    case PARENIZQUIERDO:
         t = GetNextToken();
         resultado = Expresion(); //Por gramática: <factor> | PARENIZQUIERDO <expresion> PARENDERECHO
-        if (t.type == PARENDERECHO)
-        {
-            printf("matchParenDerecho ok \n");
-        }
-        else
-        {
-            ErrorSintactico();
-        }
-        //Matcheo PARENDERECHO
+        ActualMatch(PARENDERECHO);
+        t = GetNextToken();
         break;
     default:
-        break;
+        SyntaxError();
     }
-    printf("\n resultado de Factor %d", resultado);
     return resultado;
 }
 
@@ -135,25 +120,28 @@ int Factor(void)
 static void Match(tipoDeToken tipoEsperado)
 {
     t = GetNextToken();
+    ActualMatch(tipoEsperado);
+}
+
+static void ActualMatch(tipoDeToken tipoEsperado)
+{
     if (t.type != tipoEsperado)
     {
         printf("\nRecibido ");
-        mostrarTipo(t.type);
+        ShowType(t.type);
         printf("\nEsperado ");
-        mostrarTipo(tipoEsperado);
+        ShowType(tipoEsperado);
 
-        ErrorSintactico();
+        SyntaxError();
     }
-    mostrarTipo(t.type);
 }
-
-void ErrorSintactico()
+void SyntaxError()
 {
-    printf("\nERROR SINTACTICO\n");
-    //exit(1);
+    printf("\n[PARSER] SYNTAX ERROR\n");
+    exit(1);
 }
 
-void mostrarTipo(tipoDeToken tipo)
+void ShowType(tipoDeToken tipo)
 {
     printf(" ");
     switch (tipo)
