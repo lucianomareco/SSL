@@ -1,82 +1,73 @@
-#include "simbolos.h"
-#include <stdlib.h>
+#include "memory.h"
 #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h> //exit
 
-int punteroDeSimbolo = 0;
+unsigned memoryLastPosition = 0;
+variable Memory[MEMORY_SIZE];
 
-/*int main(void){
-    int nom[8] = {46};
-    int val[8] = {1,2,3,4,5,6,7,8};
-    TOKEN c = CONSTANTE;
-    TOKEN c2 = CONSTANTE;
-    TOKEN c3 = IDENTIFICADOR;
-    TOKEN c4 = CONSTANTE;
-    AgregarSimbolo(nom, val, c);
-    AgregarSimbolo(nom, val, c2);
-    AgregarSimbolo(nom, val, c3);
-    AgregarSimbolo(nom, val, c4);
-    MostrarTablaSimbolos();
-}*/
+//Prototipos funciones privadas
 
-void AgregarSimbolo(int valor[8], TOKEN tipo)
+//Definiciones de funciones privadas
+
+//FUNCIONES PARA MANEJO DE MEMORIA
+
+void mostrarVariable(int);
+void mostrarNombre(char[]);
+
+//Definición de funciones públicas
+unsigned GetPosition(char name[])
 {
-    if (tipo == IDENTIFICADOR)
-        SetNombre(valor);
-
-    if (tipo == CONSTANTE)
-        SetValor(valor);
-
-    SetTipo(tipo);
-    ++punteroDeSimbolo;
-}
-
-void SetNombre(int nombre[])
-{
-    for (unsigned i = 0; i < 8; ++i)
-        tablaDeSimbolos[punteroDeSimbolo].nombre[i] = nombre[i];
-}
-
-void SetValor(int valor[])
-{
-    for (unsigned i = 0; i < 8; ++i)
-        tablaDeSimbolos[punteroDeSimbolo].valor[i] = valor[i];
-}
-
-void SetTipo(TOKEN tipo)
-{
-    tablaDeSimbolos[punteroDeSimbolo].tipo = tipo;
-}
-
-void MostrarTablaSimbolos()
-{
-    for (unsigned i = 0; i < 8; ++i)
+    for (unsigned i = 0; i <= memoryLastPosition; ++i)
     {
-        if (tablaDeSimbolos[i].tipo == IDENTIFICADOR)
-            printf("IDENTIFICADOR \t");
-        else if (tablaDeSimbolos[i].tipo == CONSTANTE)
-            printf("CONSTANTE \t");
-        else
-            return;
-        MostrarNombre(tablaDeSimbolos[i].nombre);
-        printf("\t");
-        MostrarValor(tablaDeSimbolos[i].valor);
-        printf("\n");
+        if (strcmp(Memory[i].name, name) == 0)
+        {
+            return i;
+        }
     }
+    strcpy(Memory[memoryLastPosition].name, name);
+    ++memoryLastPosition;
+    return memoryLastPosition - 1;
 }
 
-void MostrarNombre(int nombre[8])
+void Assign(unsigned position, int value)
 {
-    for (int i = 0; i < 8; i++)
-        printf(" [%d]", nombre[i]);
+    Memory[position].value = value;
 }
 
-void MostrarValor(int valor[8])
+int GetValue(char name[])
 {
-    for (int i = 0; i < 8; i++)
+    for (unsigned i = 0; i <= memoryLastPosition; ++i)
     {
-        if (valor[i] == 0)
-            printf("[0]");
-        else
-            printf("[%d]", (valor[i] - '0'));
+        if (strcmp(Memory[i].name, name) == 0)
+        {
+            return Memory[i].value;
+        }
     }
+    printf("\n\nEl identificador %s no existe\n\n", name);
+    exit(1);
+}
+
+void mostrarMemoria()
+{
+    printf("\n--------------MEMORIA---------------\n");
+    for (int i = 0; i < 5; i++)
+        mostrarVariable(i);
+}
+
+void mostrarVariable(int i)
+{
+    mostrarNombre(Memory[i].name);
+    printf("valor: %d", Memory[i].value);
+}
+
+void mostrarNombre(char nombre[])
+{
+    printf("\nnombre: ");
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%c", nombre[i]);
+    }
+    printf("\t");
 }
