@@ -47,9 +47,11 @@ void unaSentencia()
         break;
     case IDENTIFICADOR: //Expresión
     case CONSTANTE:
+    case PARENIZQUIERDO:
         resultado = Expresion();                //Expresión
         printf("\n Resultado = %d", resultado); //Expresión que luego será evaluada
         break;
+
     default:
         break;
     }
@@ -69,13 +71,11 @@ void Definicion()
 int Expresion(void)
 {
     int resultado = Termino();
-    switch (t.type)
+    while (t.type == SUMA)
     {
-    case SUMA: //Matcheo SUMA
         printf("\n entro a la suma ");
+        t = GetNextToken();
         resultado = resultado + Termino();
-    default:
-        break;
     }
 
     printf("\n resultado de Expresion %d", resultado);
@@ -88,7 +88,9 @@ int Termino(void)
     switch ((t = GetNextToken()).type)
     {
     case MULTIPLICACION: //Matcheo MULTIPLICACIÓN
+        t = GetNextToken();
         resultado = resultado * Factor();
+        t = GetNextToken();
         break; //Por gramática: factor { MULTIPLICACION <factor> }*
     default:
         break;
@@ -108,9 +110,19 @@ int Factor(void)
     case CONSTANTE:               //Matcheo CONSTANTE
         resultado = t.data.value; //Obtengo valor de la constante
         break;
-    case PARENIZQUIERDO:         //Matcheo PARENIZQUIERDO
+    case PARENIZQUIERDO: //Matcheo PARENIZQUIERDO
+        printf("matcheo con el par izqjj\n");
+        t = GetNextToken();
         resultado = Expresion(); //Por gramática: <factor> | PARENIZQUIERDO <expresion> PARENDERECHO
-        Match(PARENDERECHO);     //Matcheo PARENDERECHO
+        if (t.type == PARENDERECHO)
+        {
+            printf("matchParenDerecho ok \n");
+        }
+        else
+        {
+            ErrorSintactico();
+        }
+        //Matcheo PARENDERECHO
         break;
     default:
         break;
@@ -138,7 +150,7 @@ static void Match(tipoDeToken tipoEsperado)
 void ErrorSintactico()
 {
     printf("\nERROR SINTACTICO\n");
-    exit(1);
+    //exit(1);
 }
 
 void mostrarTipo(tipoDeToken tipo)
