@@ -67,6 +67,7 @@ void Definicion()
     Match(IGUAL);                                 //Matcheo IGUAL
     Match(CONSTANTE);                             //Matcheo CONSTANTE a ser asignada.
     Assign(position, t.data.value);               //Asignacion
+    t = GetNextToken();
 }
 
 int Expresion(void)
