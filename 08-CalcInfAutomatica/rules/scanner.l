@@ -31,9 +31,9 @@
                         
 \;                      return FDS;
 
-(;                      return PARENIZQUIERDO;
+\(                      return PARENIZQUIERDO;
 
-);                      return PARENDERECHO;
+\)                      return PARENDERECHO;
 
 [\n][\n]                return FDT;
 
