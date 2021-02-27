@@ -31,7 +31,6 @@ void ListaSentencias()
     {
         Sentencia();
     }
-    printf("despues del while");
 }
 
 void Sentencia()
@@ -40,21 +39,18 @@ void Sentencia()
     switch (GetNextToken().type)
     {
     case DEFINICION:
-        printf("\n flag = %d \n", keepLastToken);
         Match(DEFINICION);
         Definicion(); //Asocia valor a identificador.
         break;
     case IGUAL:
         Match(IGUAL);
-        resultado = Expresion();               //Expresión devuelve un resultado.
-        printf("Resultado = %d\n", resultado); //Muestra resultado de la expresión.
+        resultado = Expresion();                //Expresión devuelve un resultado.
+        printf("Resultado = %d \n", resultado); //Muestra resultado de la expresión.
         break;
     default:
-        printf("[Parser] Error en la sintaxis en sentencia.");
         exit(1);
         break;
     }
-    //ShowType(t.type);
     Match(FDS);
 }
 
@@ -97,6 +93,7 @@ int Factor(void)
     case IDENTIFICADOR:
         Match(IDENTIFICADOR);
         resultado = GetValue(tok.data.name);
+        break;
     case CONSTANTE:
         Match(CONSTANTE);
         resultado = tok.data.value;
@@ -107,9 +104,8 @@ int Factor(void)
         Match(PARENDERECHO);
         break;
     default:
-        printf("[Parser] Error en la sintaxis en factor.");
+        printf("[Parser] Error en la sintaxis.");
     }
-    printf("\n Resultado de factor: %d\n", resultado);
     return resultado;
 }
 
@@ -118,7 +114,7 @@ static void Match(tipoDeToken tipoEsperado)
 {
     if ((tok = GetNextToken()).type != tipoEsperado)
     {
-        printf("[Parser] Error en la sintaxis. match\n");
+        printf("[Parser] Error en la sintaxis.\n");
         exit(3);
     }
     keepLastToken = 0;
