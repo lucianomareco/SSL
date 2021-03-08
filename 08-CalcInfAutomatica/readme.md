@@ -30,7 +30,7 @@ Cabe destacar que las variables deben tener un máximo de 8 `char` para su nombr
 ## Descripción del lenguaje utilizado
 
 - Operaciones en el dominio de los números Naturales incluyendo al 0.
-- Todos los identificadores son declarados explícitamente y con una longitud máxima de 10 caracteres.
+- Todos los identificadores son declarados explícitamente y con una longitud máxima de 8 caracteres.
 - Los identificadores deben comenzar con una letra y están compuestos de letras y dígitos.
 - Las constantes son secuencias de dígitos.
 - Hay dos tipos de sentencias:
