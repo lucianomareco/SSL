@@ -50,7 +50,7 @@ El **Scanner** es la sección del programa encargada de realizar el análisis l�
 
 ### La función del Analizador Léxico `yylex()`
 
-La función del analizador léxico, `yylex`, reconoce tokens desde el flujo de entrada y se los devuelve al analizador. Bison no crea esta función automáticamente; usted debe escribirla de manera que `yyparse` pueda llamarla.
+La función del analizador léxico, `yylex`, reconoce tokens desde el flujo de entrada y se los devuelve al analizador. Bison no crea esta función automáticamente; debe escribirse de manera que `yyparse` pueda llamarla.
 
 En programas simples, `yylex` se define a menudo al final del archivo de la gramática de
 Bison. En programas un poco más complejos, lo habitual es crear un programa en Flex
