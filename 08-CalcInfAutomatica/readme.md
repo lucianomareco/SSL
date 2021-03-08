@@ -157,15 +157,10 @@ El valor devuelto por yyparse es 0 si el análisis tuvo éxito (el retorno se de
 
 Esta calculadora cuenta con la funcionalidad de almacenar en memoria variables con su nombre y valor correspondiente. Esto lo realiza gracias al código desarrollado en `memory.h` y `memory.c`. Donde están definidas las siguientes funciones:
 
-- `unsigned GetPosition(char[]);`
 - `void Assign(unsigned, int);`
 - `int GetValue(char[]);`
 
 ---
-
-### `GetPosition()`
-
-Se encarga de obtener la posición del array en la que debe guardarse el nombre de la variable. Si existe ya esa variable en el array devuelve su índice. De lo contrario guarda su nombre en donde corresponda según la variable global `memoryLastPosition` , posteriormente la incrementa y retorna su valor decrementado en uno (sin efecto de lado).
 
 ### `Assign()`
 
