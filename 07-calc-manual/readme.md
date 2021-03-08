@@ -97,8 +97,8 @@ Una vez retornado el `TOKEN`, el Parser es el encargado de analizar si es correc
 
 ```c
 <token> -> uno de <identificador> <constante> <suma> <multiplicación> <igual> <definición> <fds> <fdt>
-<identificador> -> <letra> {<letra o dígito>}*
-<constante> -> <dígito> {<dígito>}*
+<identificador> -> <letra> {<letra o dígito>}
+<constante> -> <dígito> {<dígito>}
 <letra o dígito> -> uno de <letra> <dígito>
 <letra> -> una de a-Z
 <dígito> -> uno de 0-9
@@ -159,7 +159,7 @@ Por otro lado, su estructura `data` proporciona la información necesaria para o
 
 ```c
 <Parser>     -> <listaSentencias> FDT
-<listaSentencias> -> Sentencia FDS { <Sentencia> FDS }*
+<listaSentencias> -> Sentencia FDS { <Sentencia> FDS }
 <Sentencia> -> DEF <Definición>
                IGUAL <Expresión>
 <Definición> -> ID IGUAL CONSTANTE
