@@ -61,24 +61,24 @@ que genere automáticamente esta función y enlazar Flex y Bison.
 La gramática léxica, junto a los `TOKEN` que corresponden, se especifican en el archivo `scanner.l` ubicado en la carpeta `rules\`.
 
 ```c
-[0-9]+                  {
+[0-9]{1,8}              {
                         yylval.value = atoi(yytext);
                         return CONSTANTE;
                         }
 
-[a-zA-Z][a-zA-Z | 0-9]* {
+[a-zA-Z][a-zA-Z | 0-9]{0,7}     {
                         strcpy(yylval.name, yytext);
                         return IDENTIFICADOR;
                         }
 
 \+                      return SUMA;
+        
+\*                      return PRODUCTO;
 
-\*                      return MULTIPLICACION;
-
-\$                      return DEF;
+\$                      return DEFINICION;
 
 \=                      return IGUAL;
-
+                        
 \;                      return FDS;
 
 \(                      return PARENIZQUIERDO;
@@ -87,7 +87,7 @@ La gramática léxica, junto a los `TOKEN` que corresponden, se especifican en e
 
 \!                      return FDT;
 
-[\s\t\n]                    ;
+[\s\t\n]                ;
 
 .                       return NAT;
 ```
