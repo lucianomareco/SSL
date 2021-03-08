@@ -119,7 +119,7 @@ El **Parser** es la sección del programa encargada de realizar el análisis sin
 
 El fuente de **Bison** se convierte en una función en C llamada `yyparse`. Aquí describimos las convenciones de interfaz de `yyparse` y las otras funciones que éste necesita usar.
 
-Tenga en cuenta que el analizador utiliza muchos identificadores en C comenzando con
+Es necesario tener en cuenta que el analizador utiliza muchos identificadores en C comenzando con
 ‘yy’ e ‘YY’ para propósito interno.
 
 Si utiliza tales identificadores (a parte de aquellos descritos en el manual) en una acción o en código C adicional en el archivo de la gramática, es probable que se encuentre con problemas.  
