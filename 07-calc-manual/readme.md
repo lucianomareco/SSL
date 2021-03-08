@@ -242,8 +242,10 @@ Por último, utilizaremos el comando `make run` para ejecutar directamente el ar
 | 1               | Error léxico. Sucede en la etapa de análisis realizada por el *Scanner*. |
 | 2               | Error sintáctico. Sucede en la subrutina semántica de `Sentencia`. |
 | 3               | Error sintáctico. Sucede en la subrutina semántica de `Factor`. |
-| 4               | Error sintáctico. Sucede en la función `Match`.              |
-| 5               | Error de memoria. El identificador solicitado no existe en memoria. |
+| 4               | Error léxico. Cáracter no válido |
+| 5               | Error léxico. La longitud del lexema es demasiado larga.              |
+| 6               | Error léxico. La longitud del IDENTIFICADOR es demasiado larga. |
+| 7               | Error léxico. La longitud de la CONSTANTE es demasiado larga. |
 
 
 
