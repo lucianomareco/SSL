@@ -187,7 +187,6 @@ Este se va desplazando a través de las distintas subrutinas semánticas. `Defin
 
 Esta calculadora cuenta con la funcionalidad de almacenar en memoria variables con su nombre y valor correspondiente. Esto lo realiza gracias al código desarrollado en `memory.h` y `memory.c`. Donde están definidas las siguientes funciones:
 
-- `unsigned GetPosition(char[]);`
 - `void Assign(unsigned, int);`
 - `int GetValue(char[]);`
 
