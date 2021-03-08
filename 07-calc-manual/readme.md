@@ -38,7 +38,7 @@ Cabe destacar que las variables deben tener un máximo de 8 `char` para su nombr
   - **Expresión** > Esta sentencia realiza la evaluación de una expresión simple o compuesta.
 - Las variables ya existentes pueden modificar su valor. El procedimiento es el mismo que al definir una nueva variable.
 - Cada sentencia termina con un ‘’ ; ‘’, el cual hace referencia a un token llamado “FDS” que refiere al final de la sentencia. Para confirmar el ingreso de la sentencia se presiona “ENTER” ( “\n” ).
-- El final de texto (FDT) será dado por el char ' ! ' consecutivos.
+- El final de texto (FDT) será dado por el char ' ! '.
 
 ---
 
