@@ -133,12 +133,14 @@ El valor devuelto por yyparse es 0 si el análisis tuvo éxito (el retorno se de
 
 ```c
 <Parser>     -> <listaSentencias> FDT
-<listaSentencias> -> Sentencia FDS { <Sentencia> FDS }*
+<listaSentencias> -> Sentencia FDS { <Sentencia> FDS }
 <Sentencia> -> DEF <Definición>
                IGUAL <Expresión>
 <Definición> -> ID IGUAL CONSTANTE
-<Expresión>  -> <Término> { SUMA <Término> }*
-<Término>    -> Factor { MULTIPLICACION <Factor> }*
+<Expresión>  -> <Término>
+              | <Expresión> SUMA <Término> 
+<Término>    -> <Factor> 
+              | <Término> MULTIPLICACION <Factor>
 <Factor>     -> CONSTANTE
               | IDENTIFICADOR
               | PARENIZQUIERDO <Expresión> PARENDERECHO
