@@ -21,7 +21,7 @@ Este trabajo práctico es un programa de consola desarrollado en lenguaje C, con
 
 Otra funcionalidad con la que cuenta este programa es la de almacenar variables con sus relativos nombres en una “memoria”, pudiendo acceder a los valores asociados para realizar posteriormente la evaluación de la sentencia.
 
-Cabe destacar que las variables deben tener un máximo de 20 `char` para su nombre. Característica que podría modificarse según la conveniencia del usuario. Al igual que la cantidad máxima de variables almacenadas, que ahora mismo se encuentra fijada en 200.
+Cabe destacar que las variables deben tener un máximo de 8 `char` para su nombre. Al igual que la cantidad máxima de variables almacenadas, que ahora mismo se encuentra fijada en 200.
 
 ---
 
