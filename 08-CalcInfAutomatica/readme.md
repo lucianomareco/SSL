@@ -58,6 +58,23 @@ que genere automáticamente esta función y enlazar Flex y Bison.
 
 ### Gramática Léxica
 
+```c
+<token> -> uno de <identificador> <constante> <suma> <multiplicación> <igual> <definición> <fds> <fdt>
+<identificador> -> <letra> {<letra o dígito>}
+<constante> -> <dígito> {<dígito>}
+<letra o dígito> -> uno de <letra> <dígito>
+<letra> -> una de a-Z
+<dígito> -> uno de 0-9
+<suma> -> +
+<multiplicación> -> *
+<igual> -> =
+<definición> -> $
+<parenizquierdo> -> (
+<parenderecho> -> )
+<fds> -> ;
+<fdt> -> !
+```
+
 La gramática léxica, junto a los `TOKEN` que corresponden, se especifican en el archivo `scanner.l` ubicado en la carpeta `rules\`.
 
 ```c
