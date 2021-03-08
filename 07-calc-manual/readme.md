@@ -163,8 +163,10 @@ Por otro lado, su estructura `data` proporciona la información necesaria para o
 <Sentencia> -> DEF <Definición>
                IGUAL <Expresión>
 <Definición> -> ID IGUAL CONSTANTE
-<Expresión>  -> <Término> { SUMA <Término> }*
-<Término>    -> Factor { MULTIPLICACION <Factor> }*
+<Expresión>  -> <Término>
+              | <Expresión> SUMA <Término> 
+<Término>    -> <Factor> 
+              | <Término> MULTIPLICACION <Factor>
 <Factor>     -> CONSTANTE
               | IDENTIFICADOR
               | PARENIZQUIERDO <Expresión> PARENDERECHO
@@ -190,11 +192,6 @@ Esta calculadora cuenta con la funcionalidad de almacenar en memoria variables c
 - `int GetValue(char[]);`
 
 ---
-
-### `GetPosition()`
-
-Se encarga de obtener la posición del array en la que debe guardarse el nombre de la variable. Si existe ya esa variable en el array devuelve su índice. De lo contrario guarda su nombre en donde corresponda según la variable global `memoryLastPosition` , posteriormente la incrementa y retorna su valor decrementado en uno (sin efecto de lado).
-
 ### `Assign()`
 
 Es la responsable de asignar a cierta posición un valor natural.
