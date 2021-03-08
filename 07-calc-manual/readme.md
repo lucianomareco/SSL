@@ -21,7 +21,7 @@ Este trabajo práctico es un programa de consola desarrollado en lenguaje C, que
 
 Otra funcionalidad con la que cuenta este programa es la de almacenar variables con sus relativos nombres en una “memoria”, pudiendo acceder a los valores asociados para realizar posteriormente la evaluación de la sentencia.
 
-Cabe destacar que las variables deben tener un máximo de 20 `char` para su nombre. Característica que podría modificarse según la conveniencia del usuario. Al igual que la cantidad máxima de variables almacenadas, que ahora mismo se encuentra fijada en 200.
+Cabe destacar que las variables deben tener un máximo de 8 `char` para su nombre. Característica que podría modificarse según la conveniencia del usuario. Al igual que la cantidad máxima de variables almacenadas, que ahora mismo se encuentra fijada en 200.
 
 ---
 
@@ -30,9 +30,9 @@ Cabe destacar que las variables deben tener un máximo de 20 `char` para su nomb
 ## Descripción del lenguaje utilizado
 
 - Operaciones en el dominio de los números Naturales incluyendo al 0.
-- Todos los identificadores son declarados explícitamente y con una longitud máxima de 10 caracteres.
+- Todos los identificadores son declarados explícitamente y con una longitud máxima de 8 caracteres.
 - Los identificadores deben comenzar con una letra y están compuestos de letras y dígitos.
-- Las constantes son secuencias de dígitos.
+- Las constantes son secuencias de dígitos, con un rango de [0 - 99999999]
 - Hay dos tipos de sentencias:
   - **Definición** > Este tipo de sentencia almacena el valor pasado en una variable.
   - **Expresión** > Esta sentencia realiza la evaluación de una expresión simple o compuesta.
